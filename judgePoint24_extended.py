@@ -5,7 +5,7 @@ from collections import defaultdict
 def merge(x, y):
     return 10*x+y
 
-def judgePoint24(nums) -> bool:
+def judgePoint24(nums, target) -> bool:
     ops = [add, mul, sub, truediv, merge]
     op_char = "+*-/@"
     record = []
@@ -13,9 +13,13 @@ def judgePoint24(nums) -> bool:
     def solve(nums) -> bool:
         if not nums:
             return False
+        if target in nums:
+            record.append(([target, ''],
+                              '', target))
+            return True
         n = len(nums)
         if n == 1:
-            return round(nums[0], 3) == 24
+            return round(nums[0], 3) == target
         for i, j in permutations(range(n), 2):
             # 选2个数字
             x, y = nums[i], nums[j]
@@ -34,6 +38,8 @@ def judgePoint24(nums) -> bool:
                 newNums.append(v)
                 record.append(([round(x, 3), round(y, 3)],
                               op_char[k], round(v, 3)))
+                if round(v, 3) == target:
+                    return True
                 if solve(newNums):
                     return True
                 newNums.pop()
@@ -49,4 +55,7 @@ def judgePoint24(nums) -> bool:
                 ns[i] = "("+cache[ns[i]].pop()+")"
         a, b = ns
         cache[v].append(f"{a}{op}{b}")
-    return flag, cache[24][0]+"=24"
+    return flag, cache[target][0]+"="+f'{target}'
+
+
+judgePoint24([4,10000], 10000)
