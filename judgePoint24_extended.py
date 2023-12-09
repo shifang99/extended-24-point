@@ -2,10 +2,12 @@ from operator import add, mul, sub, truediv
 from itertools import permutations, combinations_with_replacement
 from collections import defaultdict
 
+def merge(x, y):
+    return 10*x+y
 
 def judgePoint24(nums) -> bool:
-    ops = [add, mul, sub, truediv]
-    op_char = "+*-/"
+    ops = [add, mul, sub, truediv, merge]
+    op_char = "+*-/@"
     record = []
 
     def solve(nums) -> bool:
@@ -21,7 +23,7 @@ def judgePoint24(nums) -> bool:
             # 选择加减乘除 4 种运算操作之一，用得到的结果取代选出的 2 个数字
             # 先添加未选择的数字
             newNums = [z for k, z in enumerate(nums) if k not in (i, j)]
-            for k in range(4):
+            for k in range(5):
                 if k < 2 and i > j:
                     # 加法和乘法满足交换律,跳过第二种顺序
                     continue
